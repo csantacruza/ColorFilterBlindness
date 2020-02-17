@@ -17,28 +17,48 @@ class InvertGrayScale extends ColorFilter {
   }
 }
 
-class Protranopia extends ColorFilter{
-  Protranopia(): super(name: "Protranopia"){
-    
+class Protanopia extends ColorFilter{
+  Protanopia(): super(name: "Protanopia(redblind)"){
+    subFilters.add(new BlindnessSubFilter("Protanopia"));
   }
 }
 
 class Deuteranopia extends ColorFilter{
-  Deuteranopia(): super(name: "Deuteranopia"){
-    
+  Deuteranopia(): super(name: "Deuteranopia"+"(greenblind)"){
+    subFilters.add(new BlindnessSubFilter("Deuteranopia"));
   }
 }
 class Tritanopia extends ColorFilter{
-  Tritanopia(): super(name: "Tritanopia"){
-    subFilters.add(new TritanopiaScaleSubFilter());
+  Tritanopia(): super(name: "Tritanopia(blueblind)"){
+    subFilters.add(new BlindnessSubFilter("Tritanopia"));
   }
 }
+class Protanomaly extends ColorFilter{
+  Protanomaly(): super(name: "Protanomaly"){
+    subFilters.add(new BlindnessSubFilter("Protanomaly"));
+  }
+}
+
+class Deuteranomaly extends ColorFilter{
+  Deuteranomaly(): super(name: "Deuteranomaly"){
+    subFilters.add(new BlindnessSubFilter("Deuteranomaly"));
+  }
+}
+class Tritanomaly extends ColorFilter{
+  Tritanomaly(): super(name: "Tritanomaly"){
+    subFilters.add(new BlindnessSubFilter("Tritanomaly"));
+  }
+}
+
 
 List<Filter> blindnessFilters = [
 NoFilter(),
 GrayScale(),
 InvertGrayScale(),
-Protranopia(),
+Protanopia(),
 Deuteranopia(),
-Tritanopia()
+Tritanopia(),
+Protanomaly(),
+Deuteranomaly(),
+Tritanomaly()
 ];
