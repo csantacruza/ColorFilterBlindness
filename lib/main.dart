@@ -31,9 +31,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   File imageFile;
   String fileName;
-  List<Filter> filters = blindnessFilters;
 
-  Future getGalleryImage(context) async {
+  Future getGalleryImage(context,String typeSelect) async {
     imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
     fileName = basename(imageFile.path);
     var image = imageLib.decodeImage(imageFile.readAsBytesSync());
@@ -44,7 +43,9 @@ class _MainPageState extends State<MainPage> {
         builder: (context) => new PhotoFilterSelector(
           title: Text("Photo Filter Example"),
           image: image,
-          filters: blindnessFilters,
+          filters: typeSelect == "s" 
+          ? simulateBlindnessFilters 
+          : correctionBlindnessFilters,
           filename: fileName,
           loader: Center(child: CircularProgressIndicator()),
           fit: BoxFit.contain,
@@ -60,7 +61,7 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  Future getCameraImage(context) async {
+  Future getCameraImage(context,String typeSelect) async {
     imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
     fileName = basename(imageFile.path);
     var image = imageLib.decodeImage(imageFile.readAsBytesSync());
@@ -71,7 +72,9 @@ class _MainPageState extends State<MainPage> {
         builder: (context) => new PhotoFilterSelector(
           title: Text("Photo Filter Example"),
           image: image,
-          filters: blindnessFilters,
+          filters: typeSelect == "s" 
+          ? simulateBlindnessFilters 
+          : correctionBlindnessFilters,
           filename: fileName,
           loader: Center(child: CircularProgressIndicator()),
           fit: BoxFit.contain,
@@ -87,23 +90,7 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  // _openGallery(BuildContext context) async {
-  //   var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-  //   setState(() {
-  //     imageFile = picture;
-  //     Navigator.of(context).pop();
-  //   });
-  // }
-
-  // _openCamera(BuildContext context) async {
-  //   var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-  //   setState(() {
-  //     imageFile = picture;
-  //     Navigator.of(context).pop();
-  //   });
-  // }
-
-  Future<void> _showChoiceDialg(BuildContext context) {
+  Future<void> _showSimulationChoiceDialg(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -132,7 +119,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ),
                     onTap: () {
-                      getGalleryImage(context);
+                      getGalleryImage(context,"s");
                     }),
                 GestureDetector(
                     child: Card(
@@ -151,7 +138,63 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ),
                     onTap: () {
-                      getCameraImage(context);
+                      getCameraImage(context,"s");
+                    }),
+              ],
+            )),
+          );
+        });
+  }
+
+  Future<void> _showCorrectionChoiceDialg(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Make a choice",
+              textAlign: TextAlign.center,
+            ),
+            content: SingleChildScrollView(
+                child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                    child: Card(
+                      elevation: 8.0,
+                      margin: new EdgeInsets.symmetric(
+                          horizontal: 5.0, vertical: 5.0),
+                      child: Container(
+                        height: 40.0,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: MediaQuery.of(context).size.width -
+                                  (MediaQuery.of(context).size.width - 85),
+                              vertical: 10.0),
+                          child: Text("Gallery"),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      getGalleryImage(context,"c");
+                    }),
+                GestureDetector(
+                    child: Card(
+                      elevation: 8.0,
+                      margin: new EdgeInsets.symmetric(
+                          horizontal: 5.0, vertical: 5.0),
+                      child: Container(
+                        height: 40.0,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: MediaQuery.of(context).size.width -
+                                  (MediaQuery.of(context).size.width - 85),
+                              vertical: 10.0),
+                          child: Text("Camera"),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      getCameraImage(context,"c");
                     }),
               ],
             )),
@@ -180,11 +223,26 @@ class _MainPageState extends State<MainPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 _decideImageView(context),
-                RaisedButton(
-                  child: Text("Select image"),
-                  onPressed: () {
-                    _showChoiceDialg(context);
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 25),),
+                    RaisedButton(
+                      child: Text("Simulate"),
+                      onPressed: () {
+                        _showSimulationChoiceDialg(context);
+                      },
+                    ),
+                    
+                    RaisedButton(
+                      child: Text("Correction"),
+                      onPressed: () {
+                        _showCorrectionChoiceDialg(context);
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 25),),
+                  ],
                 ),
               ],
             ),

@@ -51,7 +51,7 @@ class Tritanomaly extends ColorFilter{
 }
 
 
-List<Filter> blindnessFilters = [
+List<Filter> simulateBlindnessFilters = [
 NoFilter(),
 GrayScale(),
 InvertGrayScale(),
@@ -61,4 +61,9 @@ Tritanopia(),
 Protanomaly(),
 Deuteranomaly(),
 Tritanomaly()
+];
+
+List<Filter> correctionBlindnessFilters = [
+NoFilter(),
+
 ];
