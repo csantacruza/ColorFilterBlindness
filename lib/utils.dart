@@ -103,7 +103,7 @@ void blindnessImage(Uint8List bytes,String typeBlindness) {
     avgRed =
         (typeMatrix[0] * r + typeMatrix[1] * g + typeMatrix[2] * b).round();
     avgGreen =
-        (typeMatrix[3] * r + typeMatrix[5] * g + typeMatrix[5] * b).round();
+        (typeMatrix[3] * r + typeMatrix[4] * g + typeMatrix[5] * b).round();
     avgBlue =
         (typeMatrix[6] * r + typeMatrix[7] * g + typeMatrix[8] * b).round();
 
@@ -117,11 +117,17 @@ void blindnessImage(Uint8List bytes,String typeBlindness) {
 RGBA blindnessColor(RGBA color,String typeBlindness) {
 
   switch(typeBlindness){
+    //condition where theblue (third) pigment is missing, ‘blueblind’.
     case "Tritanopia":{typeMatrix = matrixTritanopia;} break;
+    //theoretically the ‘blueinsensitive’ anomalous condition, butthe condition is not known to exist.
     case "Tritanomaly":{typeMatrix = matrixTritanomaly;} break;
+    //condition where thegreen (second) pigment is missing,‘green blind’.
     case "Deuteranopia":{typeMatrix = matrixDeuteranopia;} break;
+    //‘green insensi-tive’ anomalous condition.
     case "Deuteranomaly":{typeMatrix = matrixDeuteranomaly;} break;
+    //condition where thered (first) pigment is missing, ‘redblind’.
     case "Protanopia":{typeMatrix = matrixProtanopia;} break;
+    //‘red insensitive’anomalous  condition
     case "Protanomaly":{typeMatrix = matrixProtanomaly;} break;
     }
 
@@ -130,7 +136,7 @@ RGBA blindnessColor(RGBA color,String typeBlindness) {
           typeMatrix[2] * color.blue)
       .round();
   avgGreen = (typeMatrix[3] * color.red +
-          typeMatrix[5] * color.green +
+          typeMatrix[4] * color.green +
           typeMatrix[5] * color.blue)
       .round();
   avgBlue = (typeMatrix[6] * color.red +
